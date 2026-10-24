@@ -1,5 +1,10 @@
 # Todo App
 
+[![Tests](https://github.com/excalapp/todo-app/actions/workflows/test.yml/badge.svg)](https://github.com/excalapp/todo-app/actions/workflows/test.yml)
+[![Deploy](https://github.com/excalapp/todo-app/actions/workflows/deploy.yml/badge.svg)](https://github.com/excalapp/todo-app/actions/workflows/deploy.yml)
+
+**Live demo:** https://excalapp.github.io/todo-app/
+
 A small, fast, dependency-free todo app built with vanilla JavaScript.
 
 ## Features
@@ -19,6 +24,17 @@ npm start      # serves the app at http://localhost:3000 (override with PORT=808
 npm test       # runs the unit tests with Node's built-in test runner
 ```
 
+## CI/CD
+
+Two GitHub Actions workflows live in `.github/workflows/`:
+
+| Workflow | Runs on | What it does |
+| --- | --- | --- |
+| `test.yml` | every push to `main` and every pull request | runs `npm test` on Node 18, 20 and 22 |
+| `deploy.yml` | every push to `main` (or manually) | runs the tests, copies `public/` and `src/` into `dist/`, and publishes it to GitHub Pages |
+
+One-time setup for Pages: **Settings → Pages → Source → GitHub Actions**.
+
 ## Keyboard
 
 | Key | Action |
@@ -31,6 +47,9 @@ npm test       # runs the unit tests with Node's built-in test runner
 ## Project structure
 
 ```
+.github/workflows/
+  test.yml       # CI: run tests on push / pull request
+  deploy.yml     # CD: publish to GitHub Pages
 public/
   index.html     # markup
   styles.css     # styles (light/dark)

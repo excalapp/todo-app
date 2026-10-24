@@ -1,0 +1,58 @@
+# Tests the app, then publishes it to GitHub Pages on every push to main.
+# One-time setup: Settings -> Pages -> Source: "GitHub Actions".
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # adds a manual "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+  pages: write    # allow publishing to Pages
+  id-token: write # lets deploy-pages prove the request came from this repo
+
+# If two pushes land close together, finish the in-progress deploy
+# but skip any queued older ones.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run tests
+        run: npm test
+
+      # The page lives in public/ but loads its JS from src/,
+      # so combine both into a single folder for Pages to serve.
+      - name: Assemble site
+        run: |
+          mkdir -p dist
+          cp -r public/. dist/
+          cp -r src dist/src
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build # only runs if the build job succeeded
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
