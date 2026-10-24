@@ -1,0 +1,30 @@
+# Runs the unit tests on every push to main and on every pull request.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only access is all this workflow needs.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      # Run the job once per Node version, in parallel.
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run tests
+        run: npm test
