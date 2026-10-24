@@ -3,23 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
   <title>Todos</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="brand">Todos</span>
+      <a class="nav-link" href="https://github.com/excalapp/todo-app">Source</a>
+    </div>
+  </nav>
+
   <main class="app">
-    <h1>todos</h1>
+    <header class="hero">
+      <h1>Todos.</h1>
+      <p class="tagline">Simple. Focused. Done.</p>
+    </header>
+
     <section class="card">
       <header class="new">
-        <input id="toggle-all" type="checkbox" aria-label="Mark all as complete" hidden />
+        <input id="toggle-all" class="check" type="checkbox" aria-label="Mark all as complete" hidden />
         <form id="new-todo-form">
           <input id="new-todo" placeholder="What needs to be done?" autocomplete="off" autofocus aria-label="New todo" />
         </form>
       </header>
       <ul id="todo-list" class="list"></ul>
       <footer id="footer" class="footer" hidden>
-        <span id="count"></span>
-        <nav class="filters">
+        <span id="count" class="count"></span>
+        <nav class="filters" aria-label="Filter todos">
           <a href="#/" data-filter="all">All</a>
           <a href="#/active" data-filter="active">Active</a>
           <a href="#/completed" data-filter="completed">Completed</a>
@@ -27,8 +40,14 @@
         <button id="clear-completed" class="clear">Clear completed</button>
       </footer>
     </section>
+
     <p class="hint">Double-click a todo to edit it.</p>
   </main>
+
+  <footer class="site-footer">
+    <p>Your todos are stored privately in this browser.</p>
+  </footer>
+
   <script type="module" src="src/app.js"></script>
 </body>
 </html>
